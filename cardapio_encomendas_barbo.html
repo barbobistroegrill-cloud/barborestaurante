@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cardápio de Encomendas — Barbo Restaurante & Café</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #1D9E75; --green-dark: #0F6E56; --green-light: #E1F5EE;
+    --orange: #D85A30; --amber: #F5C17A; --amber-light: #FDF3E3;
+    --black: #1A1A1A; --gray: #F7F6F3; --gray-mid: #E8E6E0;
+    --text-muted: #888780; --white: #FFFFFF;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--black); -webkit-font-smoothing: antialiased; }
+
+  .header { background: var(--white); border-bottom: 1.5px solid var(--gray-mid); position: sticky; top: 0; z-index: 100; padding: 0 2rem; }
+  .header-inner { max-width: 1000px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .logo-area { display: flex; align-items: center; gap: 10px; }
+  .logo-b { width: 40px; height: 40px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 22px; color: white; }
+  .logo-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 26px; color: var(--green); letter-spacing: 2px; line-height: 1; }
+  .logo-sub { font-size: 10px; color: var(--text-muted); letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500; margin-top: 1px; }
+  .header-contact { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+
+  .hero { background: var(--green); padding: 3.5rem 2rem 3rem; text-align: center; position: relative; overflow: hidden; }
+  .hero::before { content: 'BARBO'; position: absolute; font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 220px; color: rgba(255,255,255,0.06); top: 50%; left: 50%; transform: translate(-50%,-50%); letter-spacing: 10px; white-space: nowrap; pointer-events: none; }
+  .hero-eyebrow { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.65); text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 10px; }
+  .hero-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 54px; color: white; letter-spacing: 3px; line-height: 1; }
+  .hero-sub { font-size: 14px; color: rgba(255,255,255,0.75); margin-top: 8px; }
+  .hero-badges { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 18px; }
+  .badge-white { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.25); border-radius: 99px; padding: 5px 14px; font-size: 12px; font-weight: 600; }
+  .badge-amber { background: var(--amber); color: var(--orange); border-radius: 99px; padding: 5px 14px; font-size: 12px; font-weight: 600; }
+
+  .nav-tabs { background: var(--white); border-bottom: 1.5px solid var(--gray-mid); padding: 0 2rem; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .nav-tabs-inner { max-width: 1000px; margin: 0 auto; display: flex; }
+  .tab-btn { flex-shrink: 0; padding: 14px 16px; font-size: 12px; font-weight: 500; font-family: 'DM Sans', sans-serif; color: var(--text-muted); background: none; border: none; cursor: pointer; border-bottom: 2.5px solid transparent; margin-bottom: -1.5px; transition: color 0.2s, border-color 0.2s; white-space: nowrap; text-transform: uppercase; letter-spacing: 0.06em; }
+  .tab-btn:hover { color: var(--green); }
+  .tab-btn.active { color: var(--green); border-bottom-color: var(--green); font-weight: 700; }
+
+  .main { max-width: 1000px; margin: 0 auto; padding: 0 2rem 5rem; }
+
+  .section { display: none; animation: fadeIn 0.3s ease; }
+  .section.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .sec-header { padding: 2.5rem 0 1.5rem; display: flex; align-items: baseline; gap: 16px; border-bottom: 1.5px solid var(--gray-mid); margin-bottom: 1.5rem; }
+  .sec-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 38px; color: var(--black); letter-spacing: 2px; text-transform: uppercase; line-height: 1; }
+  .sec-count { font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
+
+  .note-box { background: var(--amber-light); border-left: 3px solid var(--amber); border-radius: 0 8px 8px 0; padding: 10px 16px; margin-bottom: 1.5rem; font-size: 13px; color: var(--orange); font-weight: 500; line-height: 1.5; }
+
+  .subcat { display: flex; align-items: center; gap: 12px; margin: 2rem 0 1rem; }
+  .subcat-label { font-size: 11px; font-weight: 700; color: var(--orange); text-transform: uppercase; letter-spacing: 0.12em; white-space: nowrap; }
+  .subcat-line { flex: 1; height: 1px; background: var(--gray-mid); }
+
+  .items-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 620px) { .items-grid { grid-template-columns: 1fr; } .hero-title { font-size: 36px; } .header-contact { display: none; } }
+
+  .item-card { background: var(--white); border: 1px solid var(--gray-mid); border-radius: 12px; padding: 16px 18px; transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s; position: relative; overflow: hidden; }
+  .item-card:hover { border-color: var(--green); box-shadow: 0 2px 14px rgba(29,158,117,0.09); transform: translateY(-1px); }
+  .item-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--green); opacity: 0; transition: opacity 0.2s; }
+  .item-card:hover::before { opacity: 1; }
+  .item-card.wide { grid-column: 1 / -1; }
+
+  .item-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 17px; color: var(--black); text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.2; margin-bottom: 4px; }
+  .item-opts { font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 10px; font-style: italic; }
+  .item-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 10px; border-top: 1px solid var(--gray-mid); margin-top: auto; }
+  .item-price { display: flex; align-items: baseline; gap: 3px; }
+  .price-cur { font-size: 12px; font-weight: 700; color: var(--text-muted); }
+  .price-val { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 24px; color: var(--green); letter-spacing: -0.5px; }
+  .price-unit { font-size: 11px; font-weight: 600; color: var(--text-muted); }
+
+  .item-tag { font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 99px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .tag-premium { background: var(--amber-light); color: #9B6F00; }
+  .tag-mar { background: #E0F0FF; color: #1A6FA8; }
+  .tag-carne { background: #FDECEA; color: #C0392B; }
+  .tag-veggie { background: var(--green-light); color: var(--green-dark); }
+
+  .bolo-banner { background: var(--green-light); border: 1.5px dashed var(--green); border-radius: 12px; padding: 18px 22px; margin-top: 1.5rem; display: flex; align-items: center; gap: 14px; }
+  .bolo-banner-icon { font-size: 28px; flex-shrink: 0; }
+  .bolo-banner-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 17px; color: var(--green-dark); text-transform: uppercase; letter-spacing: 1px; }
+  .bolo-banner-desc { font-size: 13px; color: var(--green-dark); opacity: 0.85; margin-top: 3px; }
+
+  .cta-section { background: var(--green); border-radius: 16px; padding: 2rem; margin-top: 3.5rem; display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
+  .cta-text { flex: 1; min-width: 200px; }
+  .cta-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 28px; color: white; letter-spacing: 1px; line-height: 1; margin-bottom: 8px; }
+  .cta-desc { font-size: 14px; color: rgba(255,255,255,0.8); line-height: 1.5; }
+  .cta-contact { background: white; border-radius: 12px; padding: 14px 22px; text-align: center; flex-shrink: 0; }
+  .cta-number { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 20px; color: var(--green); letter-spacing: 0.5px; }
+  .cta-label { font-size: 10px; color: var(--text-muted); font-weight: 600; margin-top: 1px; }
+  .cta-ig { font-size: 12px; color: var(--green-dark); font-weight: 600; margin-top: 5px; }
+  .cta-address { font-size: 10px; color: var(--text-muted); margin-top: 5px; line-height: 1.4; }
+
+  .footer { background: var(--black); color: white; text-align: center; padding: 2rem; margin-top: 4rem; }
+  .footer-brand { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 28px; letter-spacing: 3px; color: var(--green); }
+  .footer-info { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 5px; }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="logo-area">
+      <div class="logo-b">B</div>
+      <div><div class="logo-name">BARBO</div><div class="logo-sub">Restaurante & Café</div></div>
+    </div>
+    <div class="header-contact">📱 WhatsApp (41) 3092-7053</div>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">🥕 Barbo Restaurante & Café</div>
+  <div class="hero-title">CARDÁPIO DE ENCOMENDAS</div>
+  <div class="hero-sub">Comida com gostinho de casa para o seu evento especial</div>
+  <div class="hero-badges">
+    <div class="badge-white">⏰ Encomenda com antecedência</div>
+    <div class="badge-amber">🛵 Entrega com taxa</div>
+    <div class="badge-white">📦 Retirada no local</div>
+    <div class="badge-white">⚖️ Preços por kg</div>
+  </div>
+</div>
+
+<nav class="nav-tabs">
+  <div class="nav-tabs-inner">
+    <button class="tab-btn active" onclick="showTab('entradas',this)">Entradas</button>
+    <button class="tab-btn" onclick="showTab('acompanhamentos',this)">Acompanhamentos</button>
+    <button class="tab-btn" onclick="showTab('massas',this)">Massas & Tortas</button>
+    <button class="tab-btn" onclick="showTab('carnes',this)">Carnes & Aves</button>
+    <button class="tab-btn" onclick="showTab('frutos',this)">Frutos do Mar</button>
+    <button class="tab-btn" onclick="showTab('sobremesas',this)">Sobremesas</button>
+  </div>
+</nav>
+
+<main class="main">
+
+  <!-- ENTRADAS -->
+  <section id="entradas" class="section active">
+    <div class="sec-header"><div class="sec-title">Entradas</div><div class="sec-count">5 opções · R$/kg</div></div>
+    <div class="items-grid">
+      <div class="item-card"><div class="item-name">Maionese</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">54,90</span><span class="price-unit">/kg</span></div></div></div>
+      <div class="item-card"><div class="item-name">Salada Especial</div><div class="item-opts">Mix de folhas com frutas, castanha e molho especial.</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">54,90</span><span class="price-unit">/kg</span></div><span class="item-tag tag-veggie">Veggie</span></div></div>
+      <div class="item-card"><div class="item-name">Salpicão de Frango</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">84,90</span><span class="price-unit">/kg</span></div></div></div>
+      <div class="item-card"><div class="item-name">Caponata</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">99,90</span><span class="price-unit">/kg</span></div><span class="item-tag tag-veggie">Veggie</span></div></div>
+      <div class="item-card wide"><div class="item-name">Salada Waldorf</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">105,90</span><span class="price-unit">/kg</span></div><span class="item-tag tag-premium">Premium</span></div></div>
+    </div>
+  </section>
+
+  <!-- ACOMPANHAMENTOS -->
+  <section id="acompanhamentos" class="section">
+    <div class="sec-header"><div class="sec-title">Acompanhamentos</div><div class="sec-count">5 opções · R$/kg</div></div>
+    <div class="items-grid">
+      <div class="item-card"><div class="item-name">Arroz Branco</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">40,90</span><span class="price-unit">/kg</span></div></div></div>
+      <div class="item-card"><div class="item-name">Legumes Assados</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">69,90</span><span class="price-unit">/kg</span></div><span class="item-tag tag-veggie">Veggie</span></div></div>
+      <div class="item-card"><div class="item-name">Arroz à Grega</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">75,90</span><span class="price-unit">/kg</span></div></div></div>
+      <div class="item-card"><div class="item-name">Mjadara</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">75,90</span><span class="price-unit">/kg</span></div><span class="item-tag tag-veggie">Veggie</span></div></div>
+      <div class="item-card wide"><div class="item-name">Farofa Salgada</div><div class="item-opts">Com farinha de milho ou mandioca.</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">79,90</span><span class="price-unit">/kg</span></div></div></div>
+    </div>
+  </section>
+
+  <!-- MASSAS E TORTAS -->
+  <section id="massas" class="section">
+    <div class="sec-header"><div class="sec-title">Massas & Tortas</div><div class="sec-count">8 opções · R$/kg</div></div>
+    <div class="items-grid">
+      <div class="item-card"><div class="item-name">Talharim</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">69,90</span><span class="price-unit">/kg</span></div></div></div>
+      <div class="item-card"><div class="item-name">Molhos</div><div class="item-opts">Quatro Queijos, Sugo, Bolonhesa, Funghi ou Alfredo.</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">69,90</span><span class="price-unit">/kg</span></div></div></div>
+      <div class="item-card"><div class="item-name">Lasanha</div><div class="item-opts">Quatro Queijos, Peito de Peru e Queijo ou à Bolonhesa com bechamel.</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">82,90</span><span class="price-unit">/kg</span></div></div></div>
+      <div class="item-card"><div class="item-name">Empadão</div><div class="item-opts">Frango, Palmito, Frango com Requeijão ou Frango com Palmito.</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">84,90</span><span class="price-unit">/kg</span></div></div></div>
+      <div class="item-card"><div class="item-name">Rondelli</div><div class="item-opts">Queijo, Peito de Peru, Brócolis ou Frango.</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">89,90</span><span class="price-unit">/kg</span></div></div></div>
+      <div class="item-card"><div class="item-name">Nhoque Frito</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">89,90</span><span class="price-unit">/kg</span></div></div></div>
+      <div class="item-card"><div class="item-name">Conchiglione Alfredo</div><div class="item-opts">Queijo, Abóbora com nozes ou Camarão.</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">104,90</span><span class="price-unit">/kg</span></div><span class="item-tag tag-premium">Premium</span></div></div>
+      <div class="item-card"><div class="item-name">Empadão de Camarão</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">169,90</span><span class="price-unit">/kg</span></div><span class="item-tag tag-mar">Frutos do Mar</span></div></div>
+    </div>
+  </section>
+
+  <!-- CARNES & AVES -->
+  <section id="carnes" class="section">
+    <div class="sec-header"><div class="sec-title">Carnes & Aves</div><div class="sec-count">7 opções · R$/kg</div></div>
+
+    <div class="subcat"><div class="subcat-line"></div><div class="subcat-label">Aves</div><div class="subcat-line"></div></div>
+    <div class="items-grid">
+      <div class="item-card"><div class="item-name">Sobrecoxa Assada</div><div class="item-opts">Com Legumes, A Florentina ou Ao Parmesão e Panko.</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">65,90</span><span class="price-unit">/kg</span></div></div></div>
+      <div class="item-card"><div class="item-name">Chester à Califórnia</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">109,90</span><span class="price-unit">/kg</span></div><span class="item-tag tag-premium">Premium</span></div></div>
+      <div class="item-card wide"><div class="item-name">Peru com Batatas</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">109,90</span><span class="price-unit">/kg</span></div><span class="item-tag tag-premium">Premium</span></div></div>
+    </div>
+
+    <div class="subcat"><div class="subcat-line"></div><div class="subcat-label">Carnes</div><div class="subcat-line"></div></div>
+    <div class="items-grid">
+      <div class="item-card"><div class="item-name">Pernil Assado com Abacaxi</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">129,90</span><span class="price-unit">/kg</span></div></div></div>
+      <div class="item-card"><div class="item-name">Lombo Suíno na Cerveja</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">139,90</span><span class="price-unit">/kg</span></div></div></div>
+      <div class="item-card"><div class="item-name">Alcatra ao Molho</div><div class="item-opts">Quatro Queijos, Funghi ou Alfredo.</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">159,90</span><span class="price-unit">/kg</span></div><span class="item-tag tag-carne">Carne</span></div></div>
+      <div class="item-card"><div class="item-name">Medalhão de Mignon</div><div class="item-opts">Molho Madeira, Quatro Queijos, Funghi ou Alfredo.</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">299,90</span><span class="price-unit">/kg</span></div><span class="item-tag tag-premium">Premium</span></div></div>
+    </div>
+  </section>
+
+  <!-- FRUTOS DO MAR -->
+  <section id="frutos" class="section">
+    <div class="sec-header"><div class="sec-title">Frutos do Mar</div><div class="sec-count">5 opções · R$/kg</div></div>
+    <div class="note-box">🦐 Produtos frescos e sazonais — disponibilidade sujeita a consulta.</div>
+    <div class="items-grid">
+      <div class="item-card"><div class="item-name">Bobó de Camarão</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">179,90</span><span class="price-unit">/kg</span></div><span class="item-tag tag-mar">Frutos do Mar</span></div></div>
+      <div class="item-card"><div class="item-name">Moqueca de Camarão</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">179,90</span><span class="price-unit">/kg</span></div><span class="item-tag tag-mar">Frutos do Mar</span></div></div>
+      <div class="item-card"><div class="item-name">Estrogonofe de Camarão</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">189,90</span><span class="price-unit">/kg</span></div><span class="item-tag tag-mar">Frutos do Mar</span></div></div>
+      <div class="item-card"><div class="item-name">Bacalhau</div><div class="item-opts">À Portuguesa ou Às Natas.</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">229,90</span><span class="price-unit">/kg</span></div><span class="item-tag tag-premium">Premium</span></div></div>
+      <div class="item-card wide"><div class="item-name">Salmão</div><div class="item-opts">Alcaparras e Camarão na Manteiga ou Ao Molho de Maracujá.</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">259,90</span><span class="price-unit">/kg</span></div><span class="item-tag tag-premium">Premium</span></div></div>
+    </div>
+  </section>
+
+  <!-- SOBREMESAS -->
+  <section id="sobremesas" class="section">
+    <div class="sec-header"><div class="sec-title">Sobremesas</div><div class="sec-count">8 opções · R$/kg</div></div>
+    <div class="items-grid">
+      <div class="item-card"><div class="item-name">Pudim de Leite</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">79,00</span><span class="price-unit">/kg</span></div></div></div>
+      <div class="item-card"><div class="item-name">Torta de Maçã</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">84,00</span><span class="price-unit">/kg</span></div></div></div>
+      <div class="item-card"><div class="item-name">Mousse de Maracujá</div><div class="item-opts">Opção: Com Chocolate.</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">84,90</span><span class="price-unit">/kg</span></div></div></div>
+      <div class="item-card"><div class="item-name">Banoffee</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">89,00</span><span class="price-unit">/kg</span></div></div></div>
+      <div class="item-card"><div class="item-name">Monoffee</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">109,90</span><span class="price-unit">/kg</span></div></div></div>
+      <div class="item-card"><div class="item-name">Bombom de Travessa</div><div class="item-opts">Uva ou Morango.</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">119,90</span><span class="price-unit">/kg</span></div><span class="item-tag tag-premium">Popular</span></div></div>
+      <div class="item-card"><div class="item-name">Suspiro de Morango</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">119,90</span><span class="price-unit">/kg</span></div></div></div>
+      <div class="item-card"><div class="item-name">Cheesecake</div><div class="item-opts">Frutas Vermelhas ou Paçoca com Brigadeiro.</div><div class="item-footer"><div class="item-price"><span class="price-cur">R$</span><span class="price-val">149,90</span><span class="price-unit">/kg</span></div><span class="item-tag tag-premium">Premium</span></div></div>
+    </div>
+    <div class="bolo-banner">
+      <div class="bolo-banner-icon">🎂</div>
+      <div>
+        <div class="bolo-banner-title">Bolos Recheados</div>
+        <div class="bolo-banner-desc">Temos também os bolos recheados favoritos dos clientes. Consulte as opções e disponibilidade pelo WhatsApp.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <div class="cta-text">
+      <div class="cta-title">FAÇA SUA ENCOMENDA</div>
+      <div class="cta-desc">Entre em contato com antecedência para garantir seu pedido. Atendemos eventos, coffee breaks, confraternizações, datas comemorativas e muito mais! 🎉</div>
+    </div>
+    <div class="cta-contact">
+      <div class="cta-number">(41) 3092-7053</div>
+      <div class="cta-label">WhatsApp</div>
+      <div class="cta-ig">@barborestaurante</div>
+      <div class="cta-address">Av. Sete de Setembro, 3250<br>Centro · Curitiba · PR</div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-brand">BARBO</div>
+  <div class="footer-info">Restaurante & Café · @barborestaurante · WhatsApp (41) 3092-7053</div>
+  <div class="footer-info">Av. Sete de Setembro, 3250 · Centro · Curitiba · PR</div>
+</footer>
+
+<script>
+  function showTab(id, btn) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+    window.scrollTo({ top: document.querySelector('.nav-tabs').offsetTop - 64, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
