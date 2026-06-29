@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Salgadinhos — Barbo Restaurante & Café</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #1D9E75; --green-dark: #0F6E56; --green-light: #E1F5EE;
+    --orange: #D85A30; --amber: #F5C17A; --amber-light: #FDF3E3;
+    --black: #1A1A1A; --gray: #F7F6F3; --gray-mid: #E8E6E0;
+    --text-muted: #888780; --white: #FFFFFF;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: #FFFFFF !important; color: var(--black); -webkit-font-smoothing: antialiased; }
+
+  .header { background: var(--white); border-bottom: 1.5px solid var(--gray-mid); position: sticky; top: 0; z-index: 100; padding: 0 2rem; }
+  .header-inner { max-width: 980px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .logo-area { display: flex; align-items: center; gap: 10px; }
+  .logo-b { width: 40px; height: 40px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 22px; color: white; }
+  .logo-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 26px; color: var(--green); letter-spacing: 2px; line-height: 1; }
+  .logo-sub { font-size: 10px; color: var(--text-muted); letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500; margin-top: 1px; }
+  .header-contact { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+
+  .hero { background: var(--green); padding: 3.5rem 2rem 3rem; text-align: center; position: relative; overflow: hidden; }
+  .hero::before { content: 'BARBO'; position: absolute; font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 220px; color: rgba(255,255,255,0.06); top: 50%; left: 50%; transform: translate(-50%,-50%); letter-spacing: 10px; white-space: nowrap; pointer-events: none; }
+  .hero-eyebrow { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.65); text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 10px; }
+  .hero-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 54px; color: white; letter-spacing: 3px; line-height: 1; }
+  .hero-sub { font-size: 14px; color: rgba(255,255,255,0.85); margin-top: 8px; }
+  .hero-badges { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 18px; }
+  .badge-white { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.25); border-radius: 99px; padding: 5px 14px; font-size: 12px; font-weight: 600; }
+  .badge-amber { background: var(--amber); color: var(--orange); border-radius: 99px; padding: 5px 14px; font-size: 12px; font-weight: 600; }
+
+  .main { max-width: 980px; margin: 0 auto; padding: 0 2rem 5rem; background: #FFFFFF !important; }
+
+  .sec-header { padding: 2.5rem 0 1.5rem; border-bottom: 1.5px solid var(--gray-mid); margin-bottom: 1.5rem; display: flex; align-items: baseline; justify-content: space-between; }
+  .sec-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 38px; color: var(--black); letter-spacing: 2px; text-transform: uppercase; line-height: 1; }
+  .sec-title span { color: var(--orange); }
+  .sec-count { font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
+
+  .note-box { background: var(--amber-light); border-left: 3px solid var(--amber); border-radius: 0 8px 8px 0; padding: 10px 16px; margin-bottom: 1.5rem; font-size: 13px; color: var(--orange); font-weight: 500; line-height: 1.5; display: block; overflow: hidden; }
+
+  /* SUBCAT DIVIDER */
+  .subcat { display: flex; align-items: center; gap: 12px; margin: 2rem 0 1rem; }
+  .subcat-label { font-size: 11px; font-weight: 700; color: var(--orange); text-transform: uppercase; letter-spacing: 0.12em; white-space: nowrap; }
+  .subcat-line { flex: 1; height: 1px; background: var(--gray-mid); }
+
+  /* GRID */
+  .salg-table { width: 100%; border-collapse: separate; border-spacing: 0 0; background: var(--white); }
+  .salg-table td { width: 50%; vertical-align: top; padding: 0 6px 12px 0; background: transparent; }
+  .salg-table td:last-child { padding-right: 0; padding-left: 6px; }
+  .salg-table td[colspan="2"] { padding: 0 0 12px 0; }
+  @media (max-width: 620px) { .salg-grid { grid-template-columns: 1fr; } .salg-grid .salg-card { grid-column: 1 / -1; } .hero-title { font-size: 38px; } .header-contact { display: none; } }
+
+  /* CARD */
+  .salg-card { background: var(--white); border: 1px solid var(--gray-mid); border-radius: 12px; padding: 13px 14px; transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s; position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 6px; }
+  .salg-card:hover { border-color: var(--green); box-shadow: 0 2px 14px rgba(29,158,117,0.09); transform: translateY(-1px); }
+  .salg-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--green); opacity: 0; transition: opacity 0.2s; }
+  .salg-card:hover::before { opacity: 1; }
+  .salg-card.wide { grid-column: 1 / -1; }
+
+  .salg-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+  .salg-info { flex: 1; }
+  .salg-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 17px; color: var(--black); text-transform: uppercase; letter-spacing: 0; line-height: 1.2; }
+  .salg-peso { font-size: 13px; color: var(--text-muted); font-weight: 500; margin-top: 2px; }
+  .salg-sabores { font-size: 13px; color: var(--text-muted); line-height: 1.4; font-style: italic; margin-top: 3px; overflow-wrap: break-word; }
+
+  /* Preço */
+  .salg-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 8px; border-top: 1px solid var(--gray-mid); margin-top: 4px; }
+  .salg-price { display: flex; align-items: baseline; gap: 2px; }
+  .price-cur { font-size: 12px; font-weight: 700; color: var(--text-muted); }
+  .price-val { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 23px; color: var(--green); }
+  .price-unit { font-size: 11px; font-weight: 600; color: var(--text-muted); margin-bottom: 2px; }
+
+  /* Tags */
+  .salg-tag { font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 99px; text-transform: uppercase; letter-spacing: 0.05em; display: inline-block; white-space: nowrap; }
+  .tag-frito  { background: #FEF3C7; color: #92400E; }
+  .tag-assado { background: var(--green-light); color: var(--green-dark); }
+  .tag-variado{ background: #EEE4F5; color: #7B3FA8; }
+  .tag-un     { background: #E0F0FF; color: #1A6FA8; }
+
+  /* CTA */
+  .cta-section { background: var(--green); border-radius: 16px; padding: 2rem; margin-top: 3rem; display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
+  .cta-text { flex: 1; min-width: 200px; }
+  .cta-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 24px; color: white; letter-spacing: 1px; line-height: 1; margin-bottom: 8px; white-space: nowrap; }
+  .cta-desc { font-size: 14px; color: rgba(255,255,255,0.8); line-height: 1.5; }
+  .cta-contact { background: white; border-radius: 12px; padding: 16px 24px; text-align: center; flex-shrink: 0; }
+  .cta-number { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 19px; color: var(--green); letter-spacing: 0.5px; white-space: nowrap; }
+  .cta-label { font-size: 11px; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
+  .cta-ig { font-size: 13px; color: var(--green-dark); font-weight: 600; margin-top: 6px; }
+  .cta-address { font-size: 11px; color: var(--text-muted); margin-top: 5px; line-height: 1.4; }
+
+  .footer { background: var(--black); color: white; text-align: center; padding: 2rem; margin-top: 4rem; }
+  .footer-brand { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 28px; letter-spacing: 3px; color: var(--green); }
+  .footer-info { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 5px; }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="logo-area">
+      <div class="logo-b">B</div>
+      <div><div class="logo-name">BARBO</div><div class="logo-sub">Restaurante & Café</div></div>
+    </div>
+    <div class="header-contact">📱 WhatsApp (41) 3092-7053</div>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">🥕 Barbo Restaurante & Café</div>
+  <div class="hero-title">ENCOMENDA DE <span style="color: var(--amber);">SALGADINHOS</span></div>
+  <div class="hero-sub">Para sua festa, coffee break, evento ou comemoração ser ainda mais especial.</div>
+  <div class="hero-badges">
+    <div class="badge-white">⏰ Encomenda com 48h de antecedência</div>
+    <div class="badge-amber">🛵 Entrega com taxa</div>
+    <div class="badge-white">📦 Retirada no local</div>
+    <div class="badge-white">🍢 Preço por cento ou unidade</div>
+  </div>
+</div>
+
+<div style="background: #FFFFFF !important;"><main class="main">
+
+  <div style="background: #FFFFFF; padding: 0;">
+    <div class="note-box">⚖️ Itens marcados com <strong>R$/cento</strong> são vendidos por 100 unidades. Itens marcados com <strong>R$/un</strong> são vendidos por unidade. Consulte disponibilidade e pedido mínimo.</div>
+  </div>
+
+<div class="subcat"><div class="subcat-line"></div><div class="subcat-label">Por Unidade · R$ / un</div><div class="subcat-line"></div></div>
+<table class="salg-table"><tbody>
+<tr><td><div class="salg-card"><div class="salg-top"><div class="salg-info"><div class="salg-name">Mini Pão de Queijo Tradicional</div><div class="salg-peso">25g</div></div><span class="salg-tag tag-assado">Assado</span></div><div class="salg-footer"><div></div><div class="salg-price"><span class="price-cur">R$</span><span class="price-val">1,50</span><span class="price-unit">/un</span></div></div></div></td><td><div class="salg-card"><div class="salg-top"><div class="salg-info"><div class="salg-name">Mini Empada</div><div class="salg-peso">Massa artesanal assada</div><div class="salg-sabores">Frango · Frango com Requeijão · Palmito</div></div><span class="salg-tag tag-variado">3 sabores</span></div><div class="salg-footer"><div></div><div class="salg-price"><span class="price-cur">R$</span><span class="price-val">2,80</span><span class="price-unit">/un</span></div></div></div></td></tr>
+<tr><td><div class="salg-card"><div class="salg-top"><div class="salg-info"><div class="salg-name">Mini Pizza</div><div class="salg-peso">30g · assada</div><div class="salg-sabores">Calabresa · Frango com Requeijão · Milho · Presunto e Queijo</div></div><span class="salg-tag tag-variado">4 sabores</span></div><div class="salg-footer"><div></div><div class="salg-price"><span class="price-cur">R$</span><span class="price-val">2,80</span><span class="price-unit">/un</span></div></div></div></td><td><div class="salg-card"><div class="salg-top"><div class="salg-info"><div class="salg-name">Mini Esfiha Aberta</div><div class="salg-peso">70g · assada</div><div class="salg-sabores">Calabresa · Carne · Pizza · Queijo</div></div><span class="salg-tag tag-variado">4 sabores</span></div><div class="salg-footer"><div></div><div class="salg-price"><span class="price-cur">R$</span><span class="price-val">3,50</span><span class="price-unit">/un</span></div></div></div></td></tr>
+<tr><td><div class="salg-card"><div class="salg-top"><div class="salg-info"><div class="salg-name">Mini Pão de Queijo c/ Goiabada</div><div class="salg-peso">30g · recheado</div></div><span class="salg-tag tag-assado">Assado</span></div><div class="salg-footer"><div></div><div class="salg-price"><span class="price-cur">R$</span><span class="price-val">3,50</span><span class="price-unit">/un</span></div></div></div></td><td><div class="salg-card"><div class="salg-top"><div class="salg-info"><div class="salg-name">Mini Pão de Queijo c/ Requeijão</div><div class="salg-peso">30g · recheado</div></div><span class="salg-tag tag-assado">Assado</span></div><div class="salg-footer"><div></div><div class="salg-price"><span class="price-cur">R$</span><span class="price-val">3,50</span><span class="price-unit">/un</span></div></div></div></td></tr>
+<tr><td colspan="2"><div class="salg-card"><div class="salg-top"><div class="salg-info"><div class="salg-name">Mini Sanduíche Natural</div><div class="salg-peso">Pão de forma integral</div><div class="salg-sabores">Atum · Frango · Peito de Peru</div></div><span class="salg-tag tag-variado">3 sabores</span></div><div class="salg-footer"><div></div><div class="salg-price"><span class="price-cur">R$</span><span class="price-val">4,50</span><span class="price-unit">/un</span></div></div></div></td></tr>
+</tbody></table>
+<div class="subcat"><div class="subcat-line"></div><div class="subcat-label">Fritos · R$ 160 / cento</div><div class="subcat-line"></div></div>
+<table class="salg-table"><tbody>
+<tr><td><div class="salg-card"><div class="salg-top"><div class="salg-info"><div class="salg-name">Mini Bolinha de Queijo</div><div class="salg-peso">30g · queijo derretido</div></div><span class="salg-tag tag-frito">Frito</span></div><div class="salg-footer"><div></div><div class="salg-price"><span class="price-cur">R$</span><span class="price-val">160</span><span class="price-unit">/cento</span></div></div></div></td><td><div class="salg-card"><div class="salg-top"><div class="salg-info"><div class="salg-name">Mini Coxinha de Frango</div><div class="salg-peso">30g · tradicional</div></div><span class="salg-tag tag-frito">Frito</span></div><div class="salg-footer"><div></div><div class="salg-price"><span class="price-cur">R$</span><span class="price-val">160</span><span class="price-unit">/cento</span></div></div></div></td></tr>
+<tr><td colspan="2"><div class="salg-card"><div class="salg-top"><div class="salg-info"><div class="salg-name">Mini Vininha Frita</div><div class="salg-peso">30g</div></div><span class="salg-tag tag-frito">Frito</span></div><div class="salg-footer"><div></div><div class="salg-price"><span class="price-cur">R$</span><span class="price-val">160</span><span class="price-unit">/cento</span></div></div></div></td></tr>
+</tbody></table>
+<div class="subcat"><div class="subcat-line"></div><div class="subcat-label">Fritos · R$ 180 / cento</div><div class="subcat-line"></div></div>
+<table class="salg-table"><tbody>
+<tr><td><div class="salg-card"><div class="salg-top"><div class="salg-info"><div class="salg-name">Mini Coxinha de Frango c/ Requeijão</div><div class="salg-peso">20g</div></div><span class="salg-tag tag-frito">Frito</span></div><div class="salg-footer"><div></div><div class="salg-price"><span class="price-cur">R$</span><span class="price-val">180</span><span class="price-unit">/cento</span></div></div></div></td><td><div class="salg-card"><div class="salg-top"><div class="salg-info"><div class="salg-name">Mini Kibe Recheado c/ Requeijão</div><div class="salg-peso">30g</div></div><span class="salg-tag tag-frito">Frito</span></div><div class="salg-footer"><div></div><div class="salg-price"><span class="price-cur">R$</span><span class="price-val">180</span><span class="price-unit">/cento</span></div></div></div></td></tr>
+<tr><td colspan="2"><div class="salg-card"><div class="salg-top"><div class="salg-info"><div class="salg-name">Mini Risoles</div><div class="salg-peso">30g</div></div><span class="salg-tag tag-frito">Frito</span></div><div class="salg-footer"><div></div><div class="salg-price"><span class="price-cur">R$</span><span class="price-val">180</span><span class="price-unit">/cento</span></div></div></div></td></tr>
+</tbody></table>
+<div class="subcat"><div class="subcat-line"></div><div class="subcat-label">Assados &amp; Fritos · R$ 250 / cento</div><div class="subcat-line"></div></div>
+<table class="salg-table"><tbody>
+<tr><td><div class="salg-card"><div class="salg-top"><div class="salg-info"><div class="salg-name">Mini Croissant</div><div class="salg-peso">30g · massa folhada</div><div class="salg-sabores">Frango · Pizza · Queijo</div></div><span class="salg-tag tag-variado">3 sabores</span></div><div class="salg-footer"><div></div><div class="salg-price"><span class="price-cur">R$</span><span class="price-val">250</span><span class="price-unit">/cento</span></div></div></div></td><td><div class="salg-card"><div class="salg-top"><div class="salg-info"><div class="salg-name">Mini Doguinho</div><div class="salg-peso">30g</div></div><span class="salg-tag tag-assado">Assado</span></div><div class="salg-footer"><div></div><div class="salg-price"><span class="price-cur">R$</span><span class="price-val">250</span><span class="price-unit">/cento</span></div></div></div></td></tr>
+<tr><td><div class="salg-card"><div class="salg-top"><div class="salg-info"><div class="salg-name" style="font-size:15px;">Mini Esfiha Fechada</div><div class="salg-peso">30g · assada</div><div class="salg-sabores">Calabresa · Carne · Frango · Pizza</div></div><span class="salg-tag tag-variado">4 sabores</span></div><div class="salg-footer"><div></div><div class="salg-price"><span class="price-cur">R$</span><span class="price-val">250</span><span class="price-unit">/cento</span></div></div></div></td><td><div class="salg-card"><div class="salg-top"><div class="salg-info"><div class="salg-name">Mini Pastel</div><div class="salg-peso">Massa crocante frita</div><div class="salg-sabores">Carne · Carne com Queijo · Pizza · Queijo</div></div><span class="salg-tag tag-frito">Frito</span></div><div class="salg-footer"><div></div><div class="salg-price"><span class="price-cur">R$</span><span class="price-val">250</span><span class="price-unit">/cento</span></div></div></div></td></tr>
+</tbody></table>
+
+  <div class="cta-section">
+    <table style="width:100%; border-collapse:collapse;">
+      <tr>
+        <td style="vertical-align:middle; padding-right:1.5rem;">
+          <div class="cta-title">FAÇA SUA ENCOMENDA</div>
+          <div class="cta-desc">Entre em contato com antecedência para garantir seu pedido. Atendemos festas, aniversários, coffee breaks e confraternizações! 🎉</div>
+        </td>
+        <td style="vertical-align:middle; width:200px; flex-shrink:0;">
+          <div class="cta-contact">
+            <div class="cta-number">(41) 3092-7053</div>
+            <div class="cta-label">WhatsApp</div>
+            <div class="cta-ig">@barborestaurante</div>
+            <div class="cta-address">Av. Sete de Setembro, 3250<br>Centro · Curitiba · PR</div>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+</main></div>
+
+<footer class="footer">
+  <div class="footer-brand">BARBO</div>
+  <div class="footer-info">Restaurante & Café · @barborestaurante · WhatsApp (41) 3092-7053</div>
+  <div class="footer-info">Av. Sete de Setembro, 3250 · Centro · Curitiba · PR</div>
+</footer>
+
+</body>
+</html>
