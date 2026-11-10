@@ -90,8 +90,9 @@ a { color: var(--link); }
 .t-blue { background: rgba(156,195,234,0.14); color: var(--azul); }
 .t-neutral { background: var(--surface-2); color: var(--muted); }
 
-.aviso { margin: 0; background: var(--aviso-bg); border-left: 3px solid var(--accent); border-radius: 0 10px 10px 0; padding: 11px 15px; font-size: 14px; font-weight: 300; color: var(--ink); }
-.aviso strong { color: var(--accent); font-weight: 600; }
+.aviso { position: relative; margin: 0; background: #EDF5F1; border-radius: 18px; padding: 15px 18px 15px 56px; font-size: 14.5px; line-height: 1.45; font-weight: 400; color: var(--ink); }
+.aviso::before { content: "i"; position: absolute; left: 16px; top: 13px; width: 28px; height: 28px; border-radius: 50%; background: #FFFFFF; color: #009176; font: 700 15px/28px var(--body, sans-serif); text-align: center; }
+.aviso strong { color: #00745e; font-weight: 600; }
 .aviso.intro { margin-top: 26px; }
 .destaque { border: 1px dashed var(--accent); border-radius: 14px; padding: 15px 18px; display: flex; flex-direction: column; gap: 4px; }
 .destaque h3 { margin: 0; font: 400 26px var(--display); letter-spacing: .01em; text-transform: uppercase; color: var(--accent); }
