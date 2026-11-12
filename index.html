@@ -133,7 +133,7 @@ footer img { height: 34px; width: auto; }
 /* página do Clube */
 .cl-hero .wrap { display: block; padding: 56px 0 60px; }
 .cl-hero h1 { margin: 0 0 14px; font-size: clamp(48px, 9vw, 104px); max-width: 12ch; }
-.selos { display: grid; grid-template-columns: repeat(15, 1fr); gap: 8px; max-width: 620px; margin: 30px 0 0; padding: 0; list-style: none; }
+.selos { display: grid; grid-template-columns: repeat(10, 1fr); gap: 8px; max-width: 460px; margin: 30px 0 0; padding: 0; list-style: none; }
 .selos li { aspect-ratio: 1; border-radius: 50%; border: 2px solid var(--ambar); }
 .selos li.on { background: var(--ambar); }
 .selos li:last-child { background: var(--laranja); border-color: var(--laranja); }
@@ -144,6 +144,14 @@ footer img { height: 34px; width: auto; }
 .form { max-width: 620px; background: #fff; border: 1px solid var(--linha); border-radius: 26px; padding: 30px; }
 .form label.c { display: block; font-weight: 600; font-size: 15px; margin: 0 0 6px; }
 .form .opc { font-weight: 400; color: var(--muted); }
+.obr { font-weight: 500; color: #b8401f; font-size: 13px; }
+.mc-cartao { max-width: 620px; background: #fff; border: 1px solid var(--linha); border-radius: 26px; padding: 30px; }
+.mc-cartao .nome { margin: 0 0 4px; font: 400 clamp(38px, 6vw, 56px)/1 var(--display); text-transform: uppercase; color: var(--verde-esc); }
+.mc-cartao .placar { margin: 0 0 18px; font-size: 20px; font-weight: 700; }
+.mc-cartao .selos li { border-color: var(--verde); background: transparent; }
+.mc-cartao .selos li.on { background: var(--verde); }
+.mc-cartao .selos li:last-child { background: transparent; border-color: var(--laranja); }
+.mc-cartao .selos li.on:last-child { background: var(--laranja); }
 .inp { width: 100%; font: 400 17px var(--body); color: var(--preto); background: var(--creme); border: 1px solid var(--linha); border-radius: 12px; padding: 13px 14px; margin: 0 0 18px; }
 .inp:focus { outline: 3px solid var(--ambar); border-color: var(--verde); }
 .dois { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
@@ -238,8 +246,9 @@ footer img { height: 34px; width: auto; }
 <section class="bloco clube" id="clube"><div class="wrap">
   <div>
     <h2 class="tit">Clube Barbo</h2>
-    <p class="intro">Junte 15 selos e ganhe uma recompensa da casa. O cadastro é grátis.</p>
+    <p class="intro">Junte 10 selos e ganhe uma recompensa da casa. O cadastro é grátis.</p>
     <a class="pill" href="clube.html">Entrar no Clube</a>
+    <p style="margin-top:18px"><a class="lnk" href="meu-clube.html">Ver meus selos</a></p>
   </div>
   <ul class="regras">
     <li>Cada compra a partir de R$&nbsp;30,00 vale 1 selo.</li>
