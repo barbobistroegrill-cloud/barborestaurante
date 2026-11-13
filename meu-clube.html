@@ -259,11 +259,19 @@ footer img { height: 34px; width: auto; }
     if (t.length < 10 || t.length > 11) return erro("Informe o telefone com DDD.");
     if (n.length !== 4) return erro("Informe o aniversário como dia/mês. Exemplo: 12/04.");
     btn.disabled = true; btn.textContent = "Consultando...";
-    var s = document.createElement("script");
-    s.src = ENDPOINT + "?action=card&tel=" + t + "&dob=" + n + "&callback=__meuClube&_=" + Date.now();
-    s.onerror = function () { erro("Não conseguimos consultar agora. Tente de novo em instantes."); };
+    var url = ENDPOINT + "?action=card&tel=" + t + "&dob=" + n + "&_=" + Date.now();
     timer = setTimeout(function () { erro("A consulta demorou. Tente de novo em instantes."); }, 20000);
-    document.body.appendChild(s);
+    // 1º: consulta sem cookies (evita erro de quem está logado em várias contas Google)
+    fetch(url, { credentials: "omit", cache: "no-store" })
+      .then(function (r) { return r.json(); })
+      .then(function (j) { window.__meuClube(j); })
+      .catch(function () {
+        // 2º: plano B pelo método antigo
+        var s = document.createElement("script");
+        s.src = url + "&callback=__meuClube";
+        s.onerror = function () { clearTimeout(timer); erro("Não conseguimos consultar agora. Tente de novo em instantes."); };
+        document.body.appendChild(s);
+      });
   });
 })();
 </script>
