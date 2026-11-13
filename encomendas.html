@@ -402,7 +402,7 @@ body.cart-pad { padding-bottom: 90px; }
     var n = cart.length;
     bar.classList.toggle('on', n > 0); document.body.classList.toggle('cart-pad', n > 0);
     document.getElementById('cbN').textContent = n + (n === 1 ? ' item' : ' itens');
-    document.getElementById('cbT').textContent = brl(total());
+    document.getElementById('cbT').textContent = 'Estimativa: ' + brl(total());
     document.getElementById('csTot').textContent = brl(total());
     var hc = cart.some(cons); document.getElementById('csTot').textContent = brl(total()) + (hc ? ' + a consultar' : '');
     var mf = minFalta(), me = document.getElementById('csMin');

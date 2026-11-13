@@ -239,12 +239,13 @@ footer img { height: 34px; width: auto; }
   function erro(t) { msg.textContent = t; btn.disabled = false; btn.textContent = "Entrar"; }
   window.__meuClube = function (r) {
     clearTimeout(timer);
+    if (r && r.motivo === "limite") return erro("Muitas tentativas com este telefone. Tente de novo daqui a 1 hora.");
     if (!r || !r.ok) return erro("Não encontramos seu cartão. Confira o telefone e a data de aniversário, ou faça seu cadastro.");
     var alvo = r.alvo || 10, selos = Math.max(0, Math.min(alvo, r.selos || 0)), bolas = "";
     for (var i = 0; i < alvo; i++) bolas += '<li class="' + (i < selos ? "on" : "") + '"></li>';
     var falta = selos >= alvo
-      ? "Cartão completo. Mostre esta tela no caixa para retirar " + esc(r.recompensa) + "."
-      : "Faltam " + (alvo - selos) + " selos para " + esc(r.recompensa) + ".";
+      ? "Cartão completo. Mostre esta tela no caixa para retirar " + esc(r.recompensa) + "." + (r.retirarAte ? " Retire até " + esc(r.retirarAte) + "." : "")
+      : (alvo - selos === 1 ? "Falta 1 selo" : "Faltam " + (alvo - selos) + " selos") + " para " + esc(r.recompensa) + "." + (r.completarAte ? " Complete até " + esc(r.completarAte) + "." : "");
     $("cartao").innerHTML = '<p class="nome">Olá, ' + esc(r.nome || "cliente") + '</p>' +
       '<p class="placar">' + selos + " de " + alvo + " selos</p>" +
       '<ul class="selos" aria-hidden="true">' + bolas + "</ul><p>" + falta + "</p>" +
