@@ -146,6 +146,13 @@ footer img { height: 34px; width: auto; }
 .form .opc { font-weight: 400; color: var(--muted); }
 .obr { font-weight: 500; color: #b8401f; font-size: 13px; }
 .dica-campo { margin: -6px 0 14px; font-size: 14px; color: var(--muted); }
+.mc-acoes { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; max-width: 620px; }
+.mc-acoes .pill.lin { background: transparent; color: var(--verde-esc); box-shadow: inset 0 0 0 2px var(--verde); border: 0; font-family: inherit; cursor: pointer; }
+.mc-instalar .pill { border: 0; font-family: inherit; cursor: pointer; }
+.mc-tel { margin-top: 14px; font-size: 14px; color: var(--muted); }
+.mc-wallet { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; max-width: 620px; }
+.mc-instalar { max-width: 620px; margin-top: 30px; padding: 24px; border-radius: 22px; background: #fff; border: 1px solid var(--linha); }
+.mc-instalar p { margin: 8px 0 14px; }
 .mc-cartao { max-width: 620px; background: #fff; border: 1px solid var(--linha); border-radius: 26px; padding: 30px; }
 .mc-cartao .nome { margin: 0 0 4px; font: 400 clamp(38px, 6vw, 56px)/1 var(--display); text-transform: uppercase; color: var(--verde-esc); }
 .mc-cartao .placar { margin: 0 0 18px; font-size: 20px; font-weight: 700; }
@@ -190,6 +197,12 @@ footer img { height: 34px; width: auto; }
   .cmenu { min-height: 0; }
 }
 </style>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="img/app-180.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Clube Barbo">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta property="og:type" content="website"><meta property="og:locale" content="pt_BR"><meta property="og:site_name" content="Barbo Restaurante &amp; Café"><meta property="og:title" content="Meu Clube Barbo · Barbo Restaurante & Café"><meta property="og:description" content="Consulte seus selos do Clube Barbo com seu telefone e sua data de aniversário."><meta property="og:url" content="https://barborestauranteecafe.com.br/meu-clube.html"><meta property="og:image" content="https://barborestauranteecafe.com.br/img/cafe/c04.jpg"><link rel="canonical" href="https://barborestauranteecafe.com.br/meu-clube.html">
 </head>
 <body>
@@ -202,7 +215,7 @@ footer img { height: 34px; width: auto; }
 
 <section class="hero cl-hero"><div class="wrap">
   <h1>Meu Clube Barbo</h1>
-  <p>Veja quantos selos você já juntou. Entre com seu telefone e sua data de aniversário.</p>
+  <p id="sub">Veja quantos selos você já juntou. Entre com seu telefone e sua data de aniversário.</p>
 </div></section>
 
 <section class="bloco" style="background:var(--creme-2)"><div class="wrap">
@@ -213,20 +226,35 @@ footer img { height: 34px; width: auto; }
         <div><label class="c" for="nasc">Data de aniversário <span class="obr">*(obrigatório)</span></label><input class="inp" id="nasc" inputmode="numeric" placeholder="dia/mês" aria-describedby="nasc-dica"></div>
       </div>
       <p class="dica-campo" id="nasc-dica">Use o dia e o mês informados no cadastro.</p>
+      <label class="chk"><input type="checkbox" id="lembrar" checked><span>Manter meu cartão aberto neste celular.</span></label>
       <button class="pill grande" type="submit" id="btn">Entrar</button>
       <p class="msg" id="msg" role="alert"></p>
     </form>
   </div>
   <div class="mc-cartao" id="cartao" hidden></div>
-  <p style="margin-top:24px">Ainda não é do Clube? <a class="lnk" href="clube.html#cadastro">Faça seu cadastro</a></p>
+  <div class="mc-acoes" id="acoes" hidden>
+    <button class="pill lin" type="button" id="atualizar">Atualizar selos</button>
+    <button class="pill lin" type="button" id="sair">Sair deste cartão</button>
+  </div>
+  <div class="mc-wallet" id="wallet" hidden></div>
+  <div class="mc-instalar" id="instalar" hidden>
+    <h2 class="tit" style="font-size:28px">Tenha o Clube no seu celular</h2>
+    <p id="inst-txt">Instale o Clube Barbo na tela inicial e veja seus selos com um toque.</p>
+    <button class="pill" type="button" id="inst-btn" hidden>Instalar o app</button>
+  </div>
+  <p style="margin-top:24px" id="cad-link">Ainda não é do Clube? <a class="lnk" href="clube.html#cadastro">Faça seu cadastro</a></p>
 </div></section>
 
 <script>
 (function () {
   var ENDPOINT = "https://script.google.com/macros/s/AKfycbwW44GNEXNrTv2qNSO_pj0vDKyCOa99kPGj8ZsLr1f7ae57RylfxhAfICjfFk2CVi0GvQ/exec";
+  var CHAVE = "clubeBarbo";
   var d = function (v) { return (v || "").replace(/\D/g, ""); };
   var $ = function (i) { return document.getElementById(i); };
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function ler() { try { return JSON.parse(localStorage.getItem(CHAVE) || "null"); } catch (e) { return null; } }
+  function gravar(o) { try { if (o) localStorage.setItem(CHAVE, JSON.stringify(o)); else localStorage.removeItem(CHAVE); } catch (e) {} }
+  function fone(x) { x = d(x).slice(0, 11); return x.length > 6 ? "(" + x.slice(0, 2) + ") " + x.slice(2, x.length - 4) + "-" + x.slice(-4) : x; }
   $("tel").addEventListener("input", function (e) {
     var x = d(e.target.value).slice(0, 11), r = x;
     if (x.length > 2) r = "(" + x.slice(0, 2) + ") " + x.slice(2);
@@ -237,12 +265,14 @@ footer img { height: 34px; width: auto; }
     var x = d(e.target.value).slice(0, 4);
     e.target.value = x.length > 2 ? x.slice(0, 2) + "/" + x.slice(2) : x;
   });
-  var msg = $("msg"), btn = $("btn"), timer = null;
-  function erro(t) { msg.textContent = t; btn.disabled = false; btn.textContent = "Entrar"; }
+  var msg = $("msg"), btn = $("btn"), timer = null, atual = null;
+  function mostraLogin() { $("login").hidden = false; $("cartao").hidden = true; $("acoes").hidden = true; $("wallet").hidden = true; $("cad-link").hidden = false; }
+  function erro(t) { clearTimeout(timer); mostraLogin(); msg.textContent = t; btn.disabled = false; btn.textContent = "Entrar"; $("atualizar").disabled = false; $("atualizar").textContent = "Atualizar selos"; }
   window.__meuClube = function (r) {
     clearTimeout(timer);
     if (r && r.motivo === "limite") return erro("Muitas tentativas com este telefone. Tente de novo daqui a 1 hora.");
-    if (!r || !r.ok) return erro("Não encontramos seu cartão. Confira o telefone e a data de aniversário, ou faça seu cadastro.");
+    if (!r || !r.ok) { gravar(null); return erro("Não encontramos seu cartão. Confira o telefone e a data de aniversário, ou faça seu cadastro."); }
+    if (atual && atual.lembrar) gravar({ t: atual.t, n: atual.n });
     var alvo = r.alvo || 10, selos = Math.max(0, Math.min(alvo, r.selos || 0)), bolas = "";
     for (var i = 0; i < alvo; i++) bolas += '<li class="' + (i < selos ? "on" : "") + '"></li>';
     var falta = selos >= alvo
@@ -252,15 +282,14 @@ footer img { height: 34px; width: auto; }
       '<p class="placar">' + selos + " de " + alvo + " selos</p>" +
       '<ul class="selos" aria-hidden="true">' + bolas + "</ul><p>" + falta + "</p>" +
       (r.resgates ? "<p>Você já retirou " + r.resgates + (r.resgates === 1 ? " recompensa" : " recompensas") + ". Obrigado por fazer parte do Clube.</p>" : "") +
-      '<p style="margin-top:18px"><a class="lnk" href="meu-clube.html">Consultar outro cartão</a></p>';
-    $("login").hidden = true; $("cartao").hidden = false;
+      '<p class="mc-tel">Cartão do telefone ' + esc(fone(atual ? atual.t : "")) + "</p>";
+    $("login").hidden = true; $("cartao").hidden = false; $("acoes").hidden = false; $("cad-link").hidden = true;
+    $("atualizar").disabled = false; $("atualizar").textContent = "Atualizar selos";
+    btn.disabled = false; btn.textContent = "Entrar";
+    if (window.__wallet) window.__wallet(r, atual);
   };
-  $("f").addEventListener("submit", function (ev) {
-    ev.preventDefault(); msg.textContent = "";
-    var t = d($("tel").value), n = d($("nasc").value);
-    if (t.length < 10 || t.length > 11) return erro("Informe o telefone com DDD.");
-    if (n.length !== 4) return erro("Informe o aniversário como dia/mês. Exemplo: 12/04.");
-    btn.disabled = true; btn.textContent = "Consultando...";
+  function consulta(t, n, lembrar) {
+    atual = { t: t, n: n, lembrar: lembrar };
     var url = ENDPOINT + "?action=card&tel=" + t + "&dob=" + n + "&_=" + Date.now();
     timer = setTimeout(function () { erro("A consulta demorou. Tente de novo em instantes."); }, 20000);
     // 1º: consulta sem cookies (evita erro de quem está logado em várias contas Google)
@@ -271,10 +300,57 @@ footer img { height: 34px; width: auto; }
         // 2º: plano B pelo método antigo
         var s = document.createElement("script");
         s.src = url + "&callback=__meuClube";
-        s.onerror = function () { clearTimeout(timer); erro("Não conseguimos consultar agora. Tente de novo em instantes."); };
+        s.onerror = function () { erro("Não conseguimos consultar agora. Tente de novo em instantes."); };
         document.body.appendChild(s);
       });
+  }
+  $("f").addEventListener("submit", function (ev) {
+    ev.preventDefault(); msg.textContent = "";
+    var t = d($("tel").value), n = d($("nasc").value);
+    if (t.length < 10 || t.length > 11) return erro("Informe o telefone com DDD.");
+    if (n.length !== 4) return erro("Informe o aniversário como dia/mês. Exemplo: 12/04.");
+    btn.disabled = true; btn.textContent = "Consultando...";
+    consulta(t, n, $("lembrar").checked);
   });
+  $("atualizar").addEventListener("click", function () {
+    if (!atual) return;
+    this.disabled = true; this.textContent = "Atualizando...";
+    consulta(atual.t, atual.n, atual.lembrar);
+  });
+  $("sair").addEventListener("click", function () {
+    gravar(null); atual = null; $("tel").value = ""; $("nasc").value = ""; msg.textContent = ""; mostraLogin(); $("tel").focus();
+  });
+  // abre direto no cartão quando o cliente pediu para manter
+  var salvo = ler();
+  if (salvo && salvo.t && salvo.n) {
+    $("tel").value = fone(salvo.t); $("nasc").value = salvo.n.slice(0, 2) + "/" + salvo.n.slice(2);
+    btn.disabled = true; btn.textContent = "Abrindo seu cartão...";
+    consulta(salvo.t, salvo.n, true);
+  }
+
+  // instalação como app
+  var ua = navigator.userAgent || "";
+  var ios = /iphone|ipad|ipod/i.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  var instalado = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+  var aviso = null;
+  if (!instalado) {
+    if (ios) {
+      $("inst-txt").textContent = "No iPhone, abra esta página no Safari, toque em Compartilhar e depois em Adicionar à Tela de Início.";
+      $("instalar").hidden = false;
+    }
+    window.addEventListener("beforeinstallprompt", function (e) {
+      e.preventDefault(); aviso = e;
+      $("inst-btn").hidden = false; $("instalar").hidden = false;
+    });
+    $("inst-btn").addEventListener("click", function () {
+      if (!aviso) return;
+      aviso.prompt();
+      aviso.userChoice.then(function () { aviso = null; $("instalar").hidden = true; });
+    });
+  }
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js").catch(function () {}); });
+  }
 })();
 </script>
 
