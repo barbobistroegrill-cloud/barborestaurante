@@ -145,6 +145,7 @@ footer img { height: 34px; width: auto; }
 .form label.c { display: block; font-weight: 600; font-size: 15px; margin: 0 0 6px; }
 .form .opc { font-weight: 400; color: var(--muted); }
 .obr { font-weight: 500; color: #b8401f; font-size: 13px; }
+.dica-campo { margin: -6px 0 14px; font-size: 14px; color: var(--muted); }
 .mc-cartao { max-width: 620px; background: #fff; border: 1px solid var(--linha); border-radius: 26px; padding: 30px; }
 .mc-cartao .nome { margin: 0 0 4px; font: 400 clamp(38px, 6vw, 56px)/1 var(--display); text-transform: uppercase; color: var(--verde-esc); }
 .mc-cartao .placar { margin: 0 0 18px; font-size: 20px; font-weight: 700; }
@@ -224,8 +225,9 @@ footer img { height: 34px; width: auto; }
       <input class="inp" id="nome" autocomplete="name" placeholder="Seu nome">
       <div class="dois">
         <div><label class="c" for="tel">Telefone <span class="obr">*(obrigatório)</span></label><input class="inp" id="tel" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="(41) 90000-0000"></div>
-        <div><label class="c" for="nasc">Data de aniversário <span class="obr">*(obrigatório)</span></label><input class="inp" id="nasc" inputmode="numeric" placeholder="dia/mês"></div>
+        <div><label class="c" for="nasc">Data de aniversário <span class="obr">*(obrigatório)</span></label><input class="inp" id="nasc" inputmode="numeric" placeholder="dia/mês" aria-describedby="nasc-dica"></div>
       </div>
+      <p class="dica-campo" id="nasc-dica">Informe o dia e o mês que você usará para consultar seus selos.</p>
       <div class="hp" aria-hidden="true"><label for="site">Não preencha</label><input id="site" tabindex="-1" autocomplete="off"></div>
       <label class="chk"><input type="checkbox" id="termos"><span>Li e aceito as <a href="#regras">regras do Clube</a> e o uso do meu nome, telefone e data de aniversário para o programa. <span class="obr">*(obrigatório)</span></span></label>
       <label class="chk"><input type="checkbox" id="mkt"><span>Quero receber o cardápio e as novidades do Barbo pelo WhatsApp. <span class="opc">(opcional)</span></span></label>
@@ -240,7 +242,7 @@ footer img { height: 34px; width: auto; }
   <div class="rgrid">
     <div><h3>Como ganhar selos</h3><p>Cada compra a partir de R$&nbsp;30,00 no Barbo vale 1 selo. Vale 1 selo por cliente por dia.</p></div>
     <div><h3>Onde vale</h3><p>Valem as compras pagas no caixa do Barbo: no salão, na cafeteria e na retirada de pedidos. Encomendas retiradas no Barbo também valem, mesmo pagas antes por Pix. Pedidos por delivery não somam selos.</p></div>
-    <div><h3>A recompensa</h3><p>Com 10 selos, você ganha uma fatia do nosso bolo de chocolate e um cafezinho para acompanhar. O cafezinho é o café puro P. O prêmio é para consumo no Barbo. Retire em até 30 dias depois de completar o cartão. Depois desse prazo, o cartão recomeça.</p></div>
+    <div><h3>A recompensa</h3><p>Com 10 selos, você ganha uma fatia do nosso bolo de chocolate e um cafezinho para acompanhar. O cafezinho é o café puro P. O prêmio é para consumo no Barbo. Retire em até 30 dias depois de completar o cartão. Enquanto o prêmio estiver disponível, novas compras não somam selos. Depois que você retira o prêmio, ou se o prazo de 30 dias passar, o cartão recomeça do zero.</p></div>
     <div><h3>Validade</h3><p>Você tem 3 meses, a partir do primeiro selo, para completar os 10 selos. Depois disso, o cartão recomeça.</p></div>
     <div><h3>Pessoal e intransferível</h3><p>Os selos são de quem fez o cadastro. Não passam para outra pessoa e não se somam a outro cartão.</p></div>
     <div><h3>Promoções</h3><p>A recompensa não se soma a outras promoções nem a convênios. Ela não é trocada por dinheiro ou desconto.</p></div>

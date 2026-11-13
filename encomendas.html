@@ -301,6 +301,7 @@ a { color: var(--link); }
 .cs-step { display: inline-flex; align-items: center; border: 1px solid #E6DCC8; border-radius: 999px; overflow: hidden; }
 .cs-step button { border: 0; background: #F3ECDD; width: 36px; height: 34px; font-size: 18px; cursor: pointer; }
 .cs-step span { min-width: 74px; text-align: center; font-weight: 600; font-size: 14px; }
+.add-nota { flex-basis: 100%; margin: 6px 0 0; font-size: 13px; line-height: 1.35; color: #00745e; }
 .cs-tam { padding: 8px 10px; border: 1px solid #E6DCC8; border-radius: 10px; background: #fff; font: 600 14px var(--body, sans-serif); }
 .cs-min { margin: 12px 0 0; padding: 12px 14px; border-radius: 14px; background: #FDF1D6; color: #6b4a00; font-size: 13.5px; line-height: 1.4; }
 .cs-modo-note { margin: 6px 2px 0; font-size: 12.5px; color: #6A6358; }
@@ -391,6 +392,11 @@ body.cart-pad { padding-bottom: 90px; }
       if (ex) ex.q = passo(ex, 1);
       else cart.push({ id: id, nome: nome, grupo: grupo, un: un, preco: num(pr.textContent), q: un === 'doce' ? 50 : un === 'kg' ? 0.5 : 1, sab: sab, sabores: sabores, m100: m100, tam: un === 'bolo' ? 'P' : '' });
       save(); render();
+      if (un === 'bolo') {
+        var nota = foot.querySelector('.add-nota');
+        if (!nota) { nota = document.createElement('p'); nota.className = 'add-nota'; nota.setAttribute('role', 'status'); foot.appendChild(nota); }
+        nota.textContent = 'Tamanho P, aprox. ' + String(TAM.P).replace('.', ',') + ' kg: estimativa de ' + brl(num(pr.textContent) * TAM.P) + '. Para trocar o tamanho, toque em Ver pedido.';
+      }
       b.textContent = '✓ Adicionado'; b.classList.add('ok');
       setTimeout(function () { b.textContent = '+ Adicionar'; b.classList.remove('ok'); }, 1200);
     });

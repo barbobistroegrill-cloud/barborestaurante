@@ -145,6 +145,7 @@ footer img { height: 34px; width: auto; }
 .form label.c { display: block; font-weight: 600; font-size: 15px; margin: 0 0 6px; }
 .form .opc { font-weight: 400; color: var(--muted); }
 .obr { font-weight: 500; color: #b8401f; font-size: 13px; }
+.dica-campo { margin: -6px 0 14px; font-size: 14px; color: var(--muted); }
 .mc-cartao { max-width: 620px; background: #fff; border: 1px solid var(--linha); border-radius: 26px; padding: 30px; }
 .mc-cartao .nome { margin: 0 0 4px; font: 400 clamp(38px, 6vw, 56px)/1 var(--display); text-transform: uppercase; color: var(--verde-esc); }
 .mc-cartao .placar { margin: 0 0 18px; font-size: 20px; font-weight: 700; }
@@ -209,8 +210,9 @@ footer img { height: 34px; width: auto; }
     <form id="f" novalidate>
       <div class="dois">
         <div><label class="c" for="tel">Telefone <span class="obr">*(obrigatório)</span></label><input class="inp" id="tel" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="(41) 90000-0000"></div>
-        <div><label class="c" for="nasc">Data de aniversário <span class="obr">*(obrigatório)</span></label><input class="inp" id="nasc" inputmode="numeric" placeholder="dia/mês"></div>
+        <div><label class="c" for="nasc">Data de aniversário <span class="obr">*(obrigatório)</span></label><input class="inp" id="nasc" inputmode="numeric" placeholder="dia/mês" aria-describedby="nasc-dica"></div>
       </div>
+      <p class="dica-campo" id="nasc-dica">Use o dia e o mês informados no cadastro.</p>
       <button class="pill grande" type="submit" id="btn">Entrar</button>
       <p class="msg" id="msg" role="alert"></p>
     </form>
