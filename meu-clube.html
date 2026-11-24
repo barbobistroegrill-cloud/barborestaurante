@@ -146,13 +146,23 @@ footer img { height: 34px; width: auto; }
 .form .opc { font-weight: 400; color: var(--muted); }
 .obr { font-weight: 500; color: #b8401f; font-size: 13px; }
 .dica-campo { margin: -6px 0 14px; font-size: 14px; color: var(--muted); }
+.mesa .tit { margin-top: 34px; }
+.mesa .tit:first-child { margin-top: 0; }
+.mesa-txt { margin: 0 0 14px; }
+.mesa-grade { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; max-width: 760px; }
+.mesa-bt { display: flex; align-items: center; min-height: 56px; padding: 14px 18px; border-radius: 16px; background: #fff; border: 1px solid var(--linha); color: var(--preto); font-weight: 600; text-decoration: none; }
+.mesa-bt:hover, .mesa-bt:focus-visible { border-color: var(--verde); }
+.mesa-bt.forte { background: var(--verde); border-color: var(--verde); color: var(--creme); }
 .mc-acoes { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; max-width: 620px; }
 .mc-acoes .pill.lin { background: transparent; color: var(--verde-esc); box-shadow: inset 0 0 0 2px var(--verde); border: 0; font-family: inherit; cursor: pointer; }
-.mc-instalar .pill { border: 0; font-family: inherit; cursor: pointer; }
+.mc-instalar .pill, .mc-wallet .pill { border: 0; font-family: inherit; cursor: pointer; }
 .mc-tel { margin-top: 14px; font-size: 14px; color: var(--muted); }
 .mc-wallet { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; max-width: 620px; }
 .mc-instalar { max-width: 620px; margin-top: 30px; padding: 24px; border-radius: 22px; background: #fff; border: 1px solid var(--linha); }
 .mc-instalar p { margin: 8px 0 14px; }
+.inst-passos { margin: 0 0 16px; padding-left: 22px; }
+.inst-passos li { margin: 6px 0; }
+#inst-copiar { margin-left: 8px; }
 .mc-cartao { max-width: 620px; background: #fff; border: 1px solid var(--linha); border-radius: 26px; padding: 30px; }
 .mc-cartao .nome { margin: 0 0 4px; font: 400 clamp(38px, 6vw, 56px)/1 var(--display); text-transform: uppercase; color: var(--verde-esc); }
 .mc-cartao .placar { margin: 0 0 18px; font-size: 20px; font-weight: 700; }
@@ -240,7 +250,9 @@ footer img { height: 34px; width: auto; }
   <div class="mc-instalar" id="instalar" hidden>
     <h2 class="tit" style="font-size:28px">Tenha o Clube no seu celular</h2>
     <p id="inst-txt">Instale o Clube Barbo na tela inicial e veja seus selos com um toque.</p>
+    <ol class="inst-passos" id="inst-passos"></ol>
     <button class="pill" type="button" id="inst-btn" hidden>Instalar o app</button>
+    <button class="pill lin" type="button" id="inst-copiar" hidden>Copiar o link</button>
   </div>
   <p style="margin-top:24px" id="cad-link">Ainda não é do Clube? <a class="lnk" href="clube.html#cadastro">Faça seu cadastro</a></p>
 </div></section>
@@ -328,24 +340,76 @@ footer img { height: 34px; width: auto; }
     consulta(salvo.t, salvo.n, true);
   }
 
-  // instalação como app
   var ua = navigator.userAgent || "";
+  // cartão na carteira do celular (aparece só quando o Barbo ativar)
+  var android = /android/i.test(ua), iphone = /iphone|ipad|ipod/i.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  window.__wallet = function (r, a) {
+    var w = $("wallet");
+    if (!r.wallet || !a || (iphone && !r.walletApple)) { w.hidden = true; return; }
+    w.innerHTML = '<button class="pill" type="button" id="w-btn">' + (iphone ? "Adicionar à Apple Wallet" : "Adicionar ao Google Wallet") + "</button>" +
+      '<p class="mc-tel" id="w-msg" role="status"></p>';
+    w.hidden = false;
+    $("w-btn").addEventListener("click", function () {
+      var b = this; b.disabled = true; b.textContent = "Preparando seu cartão...";
+      fetch(ENDPOINT + "?action=wallet&tel=" + a.t + "&dob=" + a.n + "&_=" + Date.now(), { credentials: "omit", cache: "no-store" })
+        .then(function (x) { return x.json(); })
+        .then(function (j) {
+          var link = j && j.ok ? (iphone ? j.iphone : j.android) || j.pagina : "";
+          if (!link) throw new Error("sem link");
+          b.textContent = iphone ? "Adicionar à Apple Wallet" : "Adicionar ao Google Wallet"; b.disabled = false;
+          window.location.href = link;
+        })
+        .catch(function () { b.disabled = false; b.textContent = "Tentar de novo"; $("w-msg").textContent = "Não conseguimos gerar o cartão agora. Tente de novo em instantes."; });
+    });
+  };
+  // instalação como app: sempre mostra o caminho certo para cada celular
   var ios = /iphone|ipad|ipod/i.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  var android = /android/i.test(ua);
+  var interno = /Instagram|FBAN|FBAV|FB_IAB|FBIOS|WhatsApp|Line\/|TikTok|; wv\)/i.test(ua);
+  var safari = ios && /Safari/i.test(ua) && !/CriOS|FxiOS|EdgiOS|OPiOS/i.test(ua);
   var instalado = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
   var aviso = null;
-  if (!instalado) {
-    if (ios) {
-      $("inst-txt").textContent = "No iPhone, abra esta página no Safari, toque em Compartilhar e depois em Adicionar à Tela de Início.";
-      $("instalar").hidden = false;
+  function passos(txt, lista) {
+    $("inst-txt").textContent = txt;
+    $("inst-passos").innerHTML = lista.map(function (p) { return "<li>" + p + "</li>"; }).join("");
+    $("instalar").hidden = false;
+  }
+  if (!instalado && (ios || android)) {
+    if (interno) {
+      passos("Você abriu esta página dentro de outro aplicativo. Para instalar, abra no navegador do celular.", [
+        "Toque nos três pontinhos ou no ícone de compartilhar, no canto da tela.",
+        ios ? "Escolha Abrir no Safari." : "Escolha Abrir no Chrome ou Abrir no navegador.",
+        "Na página que abrir, siga as instruções para instalar."
+      ]);
+      $("inst-copiar").hidden = false;
+    } else if (ios) {
+      passos("Para instalar no iPhone:", [
+        safari ? "Toque em Compartilhar, o quadrado com uma seta, na barra de baixo." : "Toque em Compartilhar, o quadrado com uma seta. Se não aparecer, abra esta página no Safari.",
+        "Role a lista e toque em Adicionar à Tela de Início.",
+        "Toque em Adicionar."
+      ]);
+    } else {
+      passos("Para instalar no Android:", [
+        "No Chrome, toque nos três pontinhos, no canto de cima.",
+        "Toque em Instalar app ou em Adicionar à tela inicial.",
+        "Confirme em Instalar."
+      ]);
     }
     window.addEventListener("beforeinstallprompt", function (e) {
       e.preventDefault(); aviso = e;
+      $("inst-txt").textContent = "Instale o Clube Barbo na tela inicial e veja seus selos com um toque.";
+      $("inst-passos").innerHTML = "";
       $("inst-btn").hidden = false; $("instalar").hidden = false;
     });
     $("inst-btn").addEventListener("click", function () {
       if (!aviso) return;
       aviso.prompt();
-      aviso.userChoice.then(function () { aviso = null; $("instalar").hidden = true; });
+      aviso.userChoice.then(function (c) { aviso = null; if (c && c.outcome === "accepted") $("instalar").hidden = true; });
+    });
+    window.addEventListener("appinstalled", function () { $("instalar").hidden = true; });
+    $("inst-copiar").addEventListener("click", function () {
+      var b = this, link = location.origin + location.pathname;
+      (navigator.clipboard ? navigator.clipboard.writeText(link) : Promise.reject()).then(function () { b.textContent = "Link copiado."; }, function () { b.textContent = link; });
     });
   }
   if ("serviceWorker" in navigator) {
